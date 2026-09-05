@@ -3,7 +3,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
   resolve: {
     alias: {
-      "@ssabrojs/hwpxjs": new URL("./packages/hwpxjs/dist/browser/hwpxjs.browser.mjs", import.meta.url).pathname,
+      "@ssabrojs/hwpxjs": new URL("./src/vendor/hwpxjs.browser.mjs", import.meta.url).pathname,
     },
   },
   server: {
