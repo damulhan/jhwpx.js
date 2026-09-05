@@ -445,8 +445,19 @@ export class HWPXViewer {
   public goToPage(pageNum: number): void {
     const target = Math.max(1, Math.min(this.totalPages, pageNum));
     const targetEl = this.pageElements[target - 1];
-    if (targetEl) {
-      targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (targetEl && this.viewerRoot) {
+      // Calculate target page top offset relative to viewerRoot scroll container
+      // Note: viewerRoot has padding-top (32px), so we subtract padding to align cleanly
+      const rootRect = this.viewerRoot.getBoundingClientRect();
+      const targetRect = targetEl.getBoundingClientRect();
+      const currentScrollTop = this.viewerRoot.scrollTop;
+      const targetScrollTop = currentScrollTop + (targetRect.top - rootRect.top) - 16;
+
+      this.viewerRoot.scrollTo({
+        top: Math.max(0, targetScrollTop),
+        behavior: "smooth",
+      });
+
       this.currentPage = target;
       this.options.onPageChange?.(this.currentPage, this.totalPages);
     }
