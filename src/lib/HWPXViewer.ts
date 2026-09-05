@@ -176,12 +176,46 @@ export class HWPXViewer {
         this.setZoom(1.0);
       }
 
+      this.clearError();
       this.options.onDocumentLoaded?.(this.documentMeta);
       this.options.onPageChange?.(1, this.totalPages);
     } catch (err: any) {
       console.error("Failed to load document in HWPXViewer:", err);
-      this.options.onError?.(err);
-      throw err;
+      const errorObj = err instanceof Error ? err : new Error(String(err));
+      this.showError(errorObj.message || "문서를 불러오는 중 오류가 발생했습니다.");
+      this.options.onError?.(errorObj);
+    }
+  }
+
+  public showError(message: string): void {
+    this.clear();
+    let errorEl = this.viewerRoot.querySelector(".jhwpx-error-overlay") as HTMLElement | null;
+    if (!errorEl) {
+      errorEl = document.createElement("div");
+      errorEl.className = "jhwpx-error-overlay";
+      this.viewerRoot.appendChild(errorEl);
+    }
+
+    errorEl.innerHTML = `
+      <div class="jhwpx-error-card">
+        <div class="jhwpx-error-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        </div>
+        <div class="jhwpx-error-title">문서를 열 수 없습니다</div>
+        <div class="jhwpx-error-msg">${message}</div>
+      </div>
+    `;
+    errorEl.style.display = "flex";
+  }
+
+  public clearError(): void {
+    const errorEl = this.viewerRoot.querySelector(".jhwpx-error-overlay") as HTMLElement | null;
+    if (errorEl) {
+      errorEl.remove();
     }
   }
 

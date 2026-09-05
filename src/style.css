@@ -444,8 +444,76 @@ th.jhwpx-cell {
   animation: jhwpx-spin 0.8s linear infinite;
 }
 
-@keyframes jhwpx-spin {
-  to { transform: rotate(360deg); }
+/* Error State Overlay */
+.jhwpx-error-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(248, 250, 252, 0.96);
+  z-index: 95;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+}
+
+.jhwpx-error-card {
+  max-width: 460px;
+  background: #ffffff;
+  padding: 32px 28px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  border: 1px solid #fee2e2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.jhwpx-error-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #fef2f2;
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.jhwpx-error-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #991b1b;
+  margin-bottom: 8px;
+}
+
+.jhwpx-error-msg {
+  font-size: 14px;
+  color: #4b5563;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  word-break: break-word;
+}
+
+.jhwpx-error-retry-btn {
+  padding: 8px 20px;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.jhwpx-error-retry-btn:hover {
+  background: #1d4ed8;
 }
 
 /* Print CSS */

@@ -281,6 +281,11 @@ function App() {
             onZoomChange={(z) => {
               setZoomText(`${Math.round(z * 100)}%`);
             }}
+            onError={(err) => {
+              setFormat("오류");
+              setDocTitle("문서를 열 수 없습니다");
+              console.warn("Viewer caught error:", err);
+            }}
           />
         </div>
       </section>
