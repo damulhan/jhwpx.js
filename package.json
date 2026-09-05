@@ -28,6 +28,10 @@
       "types": "./src/angular/index.ts",
       "import": "./src/angular/index.ts"
     },
+    "./web-component": {
+      "types": "./src/web-component/index.ts",
+      "import": "./src/web-component/index.ts"
+    },
     "./style.css": "./src/style.css"
   },
   "scripts": {

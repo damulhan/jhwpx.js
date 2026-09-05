@@ -195,6 +195,35 @@ export class AppDocumentView {
 
 ---
 
+## Web Component (Custom Element) 연동
+
+프레임워크 없이 순수 HTML이나 Svelte, SolidJS, PHP/JSP/Spring 등 모든 환경에서 `<jhwpx-viewer>` 표준 커스텀 태그로 바로 임베드할 수 있습니다:
+
+```html
+<!-- 1. 스크립트 및 스타일 로드 -->
+<script type="module" src="jhwpx.js/web-component"></script>
+<link rel="stylesheet" href="jhwpx.js/style.css" />
+
+<!-- 2. HTML 태그로 직접 사용 -->
+<div style="width: 100vw; height: 100vh;">
+  <jhwpx-viewer
+    file="/sample.hwpx"
+    zoom="fit-width"
+    page-gap="24"
+  ></jhwpx-viewer>
+</div>
+
+<script>
+  const viewer = document.querySelector('jhwpx-viewer');
+  viewer.addEventListener('document-loaded', (e) => {
+    console.log('Document loaded:', e.detail.title);
+  });
+  // viewer.zoomIn(), viewer.print() 등 메서드 직접 호출 가능
+</script>
+```
+
+---
+
 ## 기술 문서 (Documentation)
 
 자세한 내부 구조 및 규격 설명은 [`docs/`](./docs/README.md) 폴더를 참조해 주세요:

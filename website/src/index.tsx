@@ -38,7 +38,7 @@ const translations: Record<Lang, I18nContent> = {
     title: "jhwpx.js",
     subtitle: "한글(HWP & HWPX) 오픈소스 웹 뷰어",
     openFileBtn: "내 한글 파일 열기",
-    badge: "React · Vue 3 · Angular 지원",
+    badge: "React · Vue 3 · Angular · Web Component 지원",
     heroH1: "웹 기술로 구현된 차세대 한글(HWP / HWPX) 뷰어",
     heroDesc:
       "별도 프로그램 설치 없이 브라우저에서 바로 여는 고성능 한글 뷰어. hahnlee/hwp.js의 페이지 레이아웃 모델과 ssabro/hwpxjs의 OWPML 파싱 엔진을 결합했습니다.",
@@ -65,7 +65,7 @@ const translations: Record<Lang, I18nContent> = {
     title: "jhwpx.js",
     subtitle: "Open-source Web Viewer for Hangul (HWP & HWPX)",
     openFileBtn: "Open HWP/HWPX File",
-    badge: "React · Vue 3 · Angular Supported",
+    badge: "React · Vue 3 · Angular · Web Component",
     heroH1: "Next-gen Hangul (HWP / HWPX) Web Document Viewer",
     heroDesc:
       "High-performance Hancom Word Processor (HWP 5.0 & HWPX OWPML) viewer running entirely in your browser without plugins. Built upon hahnlee/hwp.js page layout UX and ssabro/hwpxjs OWPML parser.",

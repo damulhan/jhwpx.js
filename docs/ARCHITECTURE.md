@@ -97,4 +97,12 @@ import { JHwpxViewerComponent } from 'jhwpx.js/angular';
 export class AppDoc {}
 ```
 
+### Web Component (`<jhwpx-viewer>`)
+```html
+<script type="module" src="jhwpx.js/web-component"></script>
+
+<jhwpx-viewer file="/sample.hwpx" zoom="fit-width"></jhwpx-viewer>
+```
+
+
 
