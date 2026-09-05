@@ -160,6 +160,41 @@ function handlePrint() {
 
 ---
 
+## Angular 연동 방법 (`JHwpxViewerComponent`)
+
+Angular 14+ Standalone Component를 제공하여 별도 모듈 선언 없이 바로 사용할 수 있습니다:
+
+```typescript
+import { Component, ViewChild } from "@angular/core";
+import { JHwpxViewerComponent } from "jhwpx.js/angular";
+import "jhwpx.js/style.css";
+
+@Component({
+  selector: "app-document-view",
+  standalone: true,
+  imports: [JHwpxViewerComponent],
+  template: `
+    <div style="width: 100vw; height: 100vh;">
+      <jhwpx-viewer
+        #viewer
+        [file]="'/sample.hwpx'"
+        [initialZoom]="'fit-width'"
+        (documentLoaded)="onLoaded($event)"
+      ></jhwpx-viewer>
+    </div>
+  `
+})
+export class AppDocumentView {
+  @ViewChild("viewer") viewer!: JHwpxViewerComponent;
+
+  onLoaded(meta: any) {
+    console.log("Loaded:", meta.title);
+  }
+}
+```
+
+---
+
 ## 기술 문서 (Documentation)
 
 자세한 내부 구조 및 규격 설명은 [`docs/`](./docs/README.md) 폴더를 참조해 주세요:

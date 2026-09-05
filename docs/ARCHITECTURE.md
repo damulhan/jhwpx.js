@@ -80,3 +80,21 @@ const viewerRef = ref();
 </template>
 ```
 
+### Angular (`JHwpxViewerComponent`)
+```typescript
+import { Component } from '@angular/core';
+import { JHwpxViewerComponent } from 'jhwpx.js/angular';
+
+@Component({
+  standalone: true,
+  imports: [JHwpxViewerComponent],
+  template: `
+    <div style="width: 100vw; height: 100vh;">
+      <jhwpx-viewer [file]="'/sample.hwpx'" [initialZoom]="'fit-width'"></jhwpx-viewer>
+    </div>
+  `
+})
+export class AppDoc {}
+```
+
+

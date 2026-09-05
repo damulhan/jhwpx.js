@@ -24,6 +24,10 @@
       "types": "./src/vue/index.ts",
       "import": "./src/vue/index.ts"
     },
+    "./angular": {
+      "types": "./src/angular/index.ts",
+      "import": "./src/angular/index.ts"
+    },
     "./style.css": "./src/style.css"
   },
   "scripts": {
@@ -38,11 +42,15 @@
     "jszip": "^3.10.1"
   },
   "peerDependencies": {
+    "@angular/core": ">=14.0.0",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
     "vue": ">=3.0.0"
   },
   "peerDependenciesMeta": {
+    "@angular/core": {
+      "optional": true
+    },
     "react": {
       "optional": true
     },
@@ -54,13 +62,16 @@
     }
   },
   "devDependencies": {
+    "@angular/core": "^22.1.5",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "rxjs": "^7.8.2",
     "typescript": "~6.0.2",
     "vite": "^8.2.2",
-    "vue": "^3.5.42"
+    "vue": "^3.5.42",
+    "zone.js": "^0.16.3"
   }
 }
