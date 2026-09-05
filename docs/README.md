@@ -18,7 +18,7 @@
 3. [jhwpx.js 아키텍처 및 렌더링 파이프라인](./ARCHITECTURE.md)
    - 뷰어 생명주기 (Lifecycle)
    - A4 용지 규격 변환 및 CSS 레이아웃 모델
-   - React 컴포넌트 (`JhwpxViewer`) 연동 방법
+   - React 컴포넌트 (`JHwpxViewer`) 연동 방법
 
 ---
 
