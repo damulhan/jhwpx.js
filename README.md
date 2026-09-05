@@ -102,6 +102,42 @@ viewer.print();        // 인쇄 / PDF 저장 창 열기
 
 ---
 
+## React 연동 방법 (`JHwpxViewer`)
+
+React 프로젝트에서는 단 3줄로 임베드할 수 있는 전용 컴포넌트를 제공합니다:
+
+```tsx
+import React, { useRef } from "react";
+import { JHwpxViewer, type JHwpxViewerRef } from "./src/react";
+import "./src/style.css";
+
+export function MyViewerPage() {
+  const viewerRef = useRef<JHwpxViewerRef>(null);
+
+  return (
+    <div style={{ width: "100vw", height: "100vh" }}>
+      <JHwpxViewer
+        ref={viewerRef}
+        file="/sample.hwpx"       // URL 문자열, File 객체, ArrayBuffer 모두 지원
+        initialZoom="fit-width"   // 'fit-width' | 'fit-page' | 1.0
+        onDocumentLoaded={(meta) => console.log(meta.title, meta.format)}
+      />
+    </div>
+  );
+}
+```
+
+---
+
+## 기술 문서 (Documentation)
+
+자세한 내부 구조 및 규격 설명은 [`docs/`](./docs/README.md) 폴더를 참조해 주세요:
+- [HWPX (OWPML) 문서 규격 개요](./docs/hwpx/OWPML_Overview.md)
+- [HWP 5.0 바이너리 문서 규격 개요](./docs/hwp/HWP5_Overview.md)
+- [jhwpx.js 렌더링 파이프라인 아키텍처](./docs/ARCHITECTURE.md)
+
+---
+
 ## 로컬 개발 및 실행
 
 ```bash

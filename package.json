@@ -8,9 +8,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "website:dev": "vite website",
+    "website:build": "vite build website"
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.1",
     "typescript": "~6.0.2",
     "vite": "^8.2.2"
   },
