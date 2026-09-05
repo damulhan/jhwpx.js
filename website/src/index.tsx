@@ -97,7 +97,7 @@ function App() {
   const viewerRef = useRef<JHwpxViewerRef>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [currentSample, setCurrentSample] = useState<string>("/rich_sample.hwpx");
+  const [currentSample, setCurrentSample] = useState<string>("./rich_sample.hwpx");
   const [docTitle, setDocTitle] = useState<string>("jhwpx.js 한글 뷰어 데모.hwpx");
   const [format, setFormat] = useState<string>("HWPX");
   const [page, setPage] = useState<number>(1);
@@ -169,26 +169,26 @@ function App() {
         <div className="wb-sample-chips">
           <span style={{ fontSize: "13px", fontWeight: 600, color: "#64748b" }}>{t.sampleLabel}</span>
           <button
-            className={`wb-chip ${currentSample === "/rich_sample.hwpx" ? "active" : ""}`}
-            onClick={() => setCurrentSample("/rich_sample.hwpx")}
+            className={`wb-chip ${currentSample === "./rich_sample.hwpx" ? "active" : ""}`}
+            onClick={() => setCurrentSample("./rich_sample.hwpx")}
           >
             {t.samples.rich}
           </button>
           <button
-            className={`wb-chip ${currentSample === "/sample.hwpx" ? "active" : ""}`}
-            onClick={() => setCurrentSample("/sample.hwpx")}
+            className={`wb-chip ${currentSample === "./sample.hwpx" ? "active" : ""}`}
+            onClick={() => setCurrentSample("./sample.hwpx")}
           >
             {t.samples.sample}
           </button>
           <button
-            className={`wb-chip ${currentSample === "/sample_basic.hwp" ? "active" : ""}`}
-            onClick={() => setCurrentSample("/sample_basic.hwp")}
+            className={`wb-chip ${currentSample === "./sample_basic.hwp" ? "active" : ""}`}
+            onClick={() => setCurrentSample("./sample_basic.hwp")}
           >
             {t.samples.basicHwp}
           </button>
           <button
-            className={`wb-chip ${currentSample === "/sample_noori.hwp" ? "active" : ""}`}
-            onClick={() => setCurrentSample("/sample_noori.hwp")}
+            className={`wb-chip ${currentSample === "./sample_noori.hwp" ? "active" : ""}`}
+            onClick={() => setCurrentSample("./sample_noori.hwp")}
           >
             {t.samples.nooriHwp}
           </button>
