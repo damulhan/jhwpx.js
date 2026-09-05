@@ -263,18 +263,10 @@ export class PageRenderer {
       // Embedded Picture
       const pic = run.pic ?? run["hp:pic"] ?? run.picture;
       if (pic) {
-        const href = pic["@href"];
-        const img = pic.img ?? pic["hc:img"];
-        const binRef = img?.["@binaryItemIDRef"] ?? href;
-        if (binRef) {
-          const binPath = String(binRef).startsWith("BinData/") ? String(binRef) : `BinData/${binRef}`;
-          const raw = files[binPath];
-          if (raw) {
-            const ext = binPath.split(".").pop()?.toLowerCase() ?? "png";
-            const mime = ext === "jpg" || ext === "jpeg" ? "image/jpeg" : ext === "png" ? "image/png" : "image/gif";
-            const b64 = this.toBase64(raw);
-            textHtml += `<img src="data:${mime};base64,${b64}" class="jhwpx-image" alt="Image"/>`;
-          }
+        const imgInfo = this.resolveImage(files, pic);
+        if (imgInfo) {
+          const b64 = this.toBase64(imgInfo.bytes);
+          textHtml += `<img src="data:${imgInfo.mime};base64,${b64}" class="jhwpx-image" alt="Image"/>`;
         }
       }
 
@@ -414,6 +406,77 @@ export class PageRenderer {
 
   private escapeHtml(s: string): string {
     return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  private resolveImage(
+    files: Record<string, Uint8Array>,
+    pic: any
+  ): { bytes: Uint8Array; mime: string } | null {
+    const href = pic["@href"] ?? pic["@hp:href"];
+    const img = pic.img ?? pic["hc:img"];
+    const binRef = img?.["@binaryItemIDRef"] ?? img?.["@hc:binaryItemIDRef"] ?? href;
+
+    const candidates = [
+      href,
+      binRef,
+      binRef ? `BinData/${binRef}` : null,
+      href ? `BinData/${href}` : null,
+    ].filter(Boolean) as string[];
+
+    for (const c of candidates) {
+      if (files[c]) {
+        return {
+          bytes: files[c],
+          mime: this.detectImageMime(files[c], c),
+        };
+      }
+    }
+
+    // Fuzzy matching against BinData files (ignoring extension or case differences)
+    const baseName = String(binRef || href).replace(/^BinData\//i, "").toLowerCase();
+    for (const k of Object.keys(files)) {
+      if (k.toLowerCase().startsWith("bindata/")) {
+        const fileBase = k.replace(/^BinData\//i, "").toLowerCase();
+        if (fileBase === baseName || fileBase.startsWith(baseName + ".")) {
+          return {
+            bytes: files[k],
+            mime: this.detectImageMime(files[k], k),
+          };
+        }
+      }
+    }
+
+    return null;
+  }
+
+  private detectImageMime(bytes: Uint8Array, path: string): string {
+    // Magic bytes detection
+    if (bytes.length >= 4) {
+      if (bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) {
+        return "image/jpeg";
+      }
+      if (bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47) {
+        return "image/png";
+      }
+      if (bytes[0] === 0x47 && bytes[1] === 0x49 && bytes[2] === 0x46) {
+        return "image/gif";
+      }
+      if (bytes[0] === 0x42 && bytes[1] === 0x4d) {
+        return "image/bmp";
+      }
+      if (bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46) {
+        return "image/webp";
+      }
+    }
+
+    const ext = path.split(".").pop()?.toLowerCase() ?? "";
+    if (ext === "jpg" || ext === "jpeg") return "image/jpeg";
+    if (ext === "png") return "image/png";
+    if (ext === "gif") return "image/gif";
+    if (ext === "bmp") return "image/bmp";
+    if (ext === "webp") return "image/webp";
+
+    return "image/png";
   }
 
   private toBase64(bytes: Uint8Array): string {
