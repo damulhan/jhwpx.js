@@ -1,0 +1,273 @@
+.wb-container {
+  min-height: 100vh;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  color: #0f172a;
+}
+
+/* Nav */
+.wb-hero-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.wb-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.wb-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.wb-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.wb-subtitle {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.wb-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  transition: all 0.15s;
+}
+
+.wb-btn-primary {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+.wb-btn-primary:hover {
+  background: #1d4ed8;
+}
+
+/* Hero Header */
+.wb-hero-header {
+  text-align: center;
+  padding: 48px 24px 28px 24px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.wb-badge {
+  display: inline-block;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  margin-bottom: 16px;
+  border: 1px solid #bfdbfe;
+}
+
+.wb-hero-header h1 {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  color: #0f172a;
+  margin-bottom: 12px;
+}
+
+.wb-desc {
+  font-size: 16px;
+  color: #475569;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.wb-sample-chips {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.wb-chip {
+  padding: 6px 14px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.wb-chip:hover {
+  border-color: #3b82f6;
+  color: #2563eb;
+}
+
+.wb-chip.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+/* Main Viewer Section */
+.wb-viewer-section {
+  width: 92%;
+  max-width: 1200px;
+  margin: 0 auto 48px auto;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.wb-viewer-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.wb-doc-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wb-doc-badge {
+  font-size: 11px;
+  font-weight: 700;
+  background: #eff6ff;
+  color: #2563eb;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #bfdbfe;
+}
+
+.wb-doc-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.wb-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wb-tool-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #f1f5f9;
+  padding: 3px 6px;
+  border-radius: 6px;
+}
+
+.wb-btn-sm {
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #1e293b;
+}
+
+.wb-btn-sm:hover {
+  background: #f8fafc;
+  color: #2563eb;
+}
+
+.wb-page-indicator, .wb-zoom-indicator {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0 4px;
+  color: #475569;
+}
+
+.wb-btn-print {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+}
+
+.wb-btn-print:hover {
+  background: #1d4ed8;
+  color: #fff;
+}
+
+.wb-viewer-frame {
+  height: 750px;
+  position: relative;
+  background: #e2e8f0;
+}
+
+/* Code section */
+.wb-code-section {
+  width: 92%;
+  max-width: 1200px;
+  margin: 0 auto 64px auto;
+}
+
+.wb-code-section h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #0f172a;
+}
+
+.wb-code-block {
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 20px;
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-x: auto;
+}
+
+/* Footer */
+.wb-footer {
+  margin-top: auto;
+  border-top: 1px solid #e2e8f0;
+  padding: 24px;
+  text-align: center;
+  background: #ffffff;
+  font-size: 14px;
+  color: #334155;
+}
