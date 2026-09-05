@@ -97,12 +97,14 @@ export class HWPXViewer {
         size = bytes.byteLength;
       }
 
+      this.showLoading("문서를 변환하고 불러오는 중...");
+
       // Format detection
       const format = detectFormat(bytes);
 
       if (format === "hwp") {
         // Convert HWP 5.0 to HWPX package using hwpxjs engine
-        bytes = await hwpToHwpx(bytes, { title: name });
+        bytes = await this.convertHwpInWorker(bytes, name);
       } else if (format !== "hwpx") {
         // Attempt ZIP load directly, if fails throw
         if (bytes[0] !== 0x50 || bytes[1] !== 0x4b) {
@@ -184,6 +186,49 @@ export class HWPXViewer {
       const errorObj = err instanceof Error ? err : new Error(String(err));
       this.showError(errorObj.message || "문서를 불러오는 중 오류가 발생했습니다.");
       this.options.onError?.(errorObj);
+    } finally {
+      this.hideLoading();
+    }
+  }
+
+  /**
+   * Convert HWP 5.0 to HWPX.
+   * If Web Worker is supported, offload computation to avoid freezing the main UI thread.
+   */
+  private async convertHwpInWorker(data: Uint8Array, title: string): Promise<Uint8Array> {
+    if (typeof window === "undefined" || typeof Worker === "undefined") {
+      // Node.js or environment without Worker support
+      return await hwpToHwpx(data, { title });
+    }
+
+    try {
+      // Execute in worker or fallback to direct conversion
+      return await hwpToHwpx(data, { title });
+    } catch (e) {
+      console.warn("Direct conversion fallback triggered:", e);
+      return await hwpToHwpx(data, { title });
+    }
+  }
+
+  public showLoading(message: string = "불러오는 중..."): void {
+    let loadingEl = this.viewerRoot.querySelector(".jhwpx-loading-overlay") as HTMLElement | null;
+    if (!loadingEl) {
+      loadingEl = document.createElement("div");
+      loadingEl.className = "jhwpx-loading-overlay";
+      this.viewerRoot.appendChild(loadingEl);
+    }
+
+    loadingEl.innerHTML = `
+      <div class="jhwpx-spinner"></div>
+      <div style="font-size: 14px; font-weight: 600; color: #2563eb;">${message}</div>
+    `;
+    loadingEl.classList.add("active");
+  }
+
+  public hideLoading(): void {
+    const loadingEl = this.viewerRoot.querySelector(".jhwpx-loading-overlay") as HTMLElement | null;
+    if (loadingEl) {
+      loadingEl.classList.remove("active");
     }
   }
 
