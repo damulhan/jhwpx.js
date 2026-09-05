@@ -66,20 +66,35 @@ export class PageRenderer {
       const xmlObj = this.parseXml(xmlStr);
       if (!xmlObj) continue;
 
-      const secNode = xmlObj.sec ?? xmlObj.section ?? xmlObj["hp:section"];
+      const secNode = xmlObj.sec ?? xmlObj.section ?? xmlObj["hp:section"] ?? xmlObj["hs:sec"];
       if (!secNode) continue;
 
       // Extract page layout attributes if present
-      const layout = this.extractPageLayout(secNode, i + 1);
+      const baseLayout = this.extractPageLayout(secNode, renderedPages.length + 1);
+      const usableHeightPt = Math.max(200, baseLayout.heightPt - baseLayout.marginTopPt - baseLayout.marginBottomPt);
 
-      // Render inner HTML for this section
-      const html = this.renderSectionContent(secNode, files, characterProperties, fontFaces);
+      // Extract and paginate content into discrete pages
+      const pageHtmlChunks = this.paginateSectionContent(
+        secNode,
+        usableHeightPt,
+        files,
+        characterProperties,
+        fontFaces
+      );
 
-      renderedPages.push({
-        pageIndex: i,
-        layout,
-        html,
-      });
+      for (let pIdx = 0; pIdx < pageHtmlChunks.length; pIdx++) {
+        const pageNum = renderedPages.length + 1;
+        const layout: PageLayoutInfo = {
+          ...baseLayout,
+          pageNumber: pageNum,
+        };
+
+        renderedPages.push({
+          pageIndex: renderedPages.length,
+          layout,
+          html: pageHtmlChunks[pIdx] || "<p class=\"jhwpx-para\">&nbsp;</p>",
+        });
+      }
     }
 
     return renderedPages;
@@ -98,63 +113,128 @@ export class PageRenderer {
     };
 
     // Look for pagePr or secPr
-    const pagePr = secNode?.secPr?.pagePr ?? secNode?.pagePr;
+    const pagePr = secNode?.secPr?.pagePr ?? secNode?.pagePr ?? secNode?.["hp:secPr"]?.["hp:pagePr"] ?? secNode?.["hp:pagePr"];
     if (pagePr) {
-      const w = pagePr["@width"] ?? pagePr["@w"];
-      const h = pagePr["@height"] ?? pagePr["@h"];
+      const w = pagePr["@width"] ?? pagePr["@w"] ?? pagePr["@hp:width"];
+      const h = pagePr["@height"] ?? pagePr["@h"] ?? pagePr["@hp:height"];
       if (w) defaultLayout.widthPt = Number(w) / 100;
       if (h) defaultLayout.heightPt = Number(h) / 100;
 
       const margin = pagePr.margin ?? pagePr["hp:margin"];
       if (margin) {
-        if (margin["@top"]) defaultLayout.marginTopPt = Number(margin["@top"]) / 100;
-        if (margin["@right"]) defaultLayout.marginRightPt = Number(margin["@right"]) / 100;
-        if (margin["@bottom"]) defaultLayout.marginBottomPt = Number(margin["@bottom"]) / 100;
-        if (margin["@left"]) defaultLayout.marginLeftPt = Number(margin["@left"]) / 100;
+        const top = margin["@top"] ?? margin["@hp:top"];
+        const right = margin["@right"] ?? margin["@hp:right"];
+        const bottom = margin["@bottom"] ?? margin["@hp:bottom"];
+        const left = margin["@left"] ?? margin["@hp:left"];
+
+        if (top) defaultLayout.marginTopPt = Number(top) / 100;
+        if (right) defaultLayout.marginRightPt = Number(right) / 100;
+        if (bottom) defaultLayout.marginBottomPt = Number(bottom) / 100;
+        if (left) defaultLayout.marginLeftPt = Number(left) / 100;
       }
     }
 
     return defaultLayout;
   }
 
-  private renderSectionContent(
+  /**
+   * Paginate section paragraphs and tables across multiple pages based on page budget and explicit page breaks.
+   */
+  private paginateSectionContent(
     secNode: any,
+    usableHeightPt: number,
     files: Record<string, Uint8Array>,
     charProps: Map<string, any>,
     fontFaces: Map<string, any>
-  ): string {
-    const pieces: string[] = [];
+  ): string[] {
+    const pages: string[][] = [[]];
+    let currentHeight = 0;
 
     const ps = secNode.p ?? secNode["hp:p"];
     if (ps) {
       const paras = Array.isArray(ps) ? ps : [ps];
       for (const p of paras) {
+        const pb = p["@pageBreak"] ?? p["@hp:pageBreak"];
+        const isExplicitBreak = pb === "1" || pb === 1;
+
+        // Render paragraph HTML
         const pInner = this.renderParagraph(p, files, charProps, fontFaces);
         const alignStyle = this.getAlignStyle(p);
         const lineSpacingStyle = this.getLineSpacingStyle(p);
         const marginStyle = this.getMarginStyle(p);
-
         const styleAttr = `style="${alignStyle};${lineSpacingStyle};${marginStyle}"`;
-        pieces.push(`<p class="jhwpx-para" ${styleAttr}>${pInner}</p>`);
+        const paraHtml = `<p class="jhwpx-para" ${styleAttr}>${pInner}</p>`;
 
         // Collect tables embedded in paragraph
         const tables = this.collectTables(p);
+        const tableHtmls = tables.map(tbl => this.renderTable(tbl, files, charProps, fontFaces));
+
+        // Estimate item height in points
+        const textLen = this.getParagraphTextLength(p);
+        const lines = Math.max(1, Math.ceil(textLen / 50));
+        let itemHeight = lines * 18 + 4; // ~18pt per line + margin
+
         for (const tbl of tables) {
-          pieces.push(this.renderTable(tbl, files, charProps, fontFaces));
+          const trs = tbl.tr ?? tbl["hp:tr"];
+          const rowCount = trs ? (Array.isArray(trs) ? trs.length : 1) : 1;
+          itemHeight += rowCount * 26 + 10;
+        }
+
+        // Check if item fits in current page or requires a page break
+        if ((isExplicitBreak || (currentHeight + itemHeight > usableHeightPt)) && currentHeight > 0) {
+          pages.push([]);
+          currentHeight = itemHeight;
+        } else {
+          currentHeight += itemHeight;
+        }
+
+        const curPage = pages[pages.length - 1];
+        curPage.push(paraHtml);
+        for (const tblHtml of tableHtmls) {
+          curPage.push(tblHtml);
         }
       }
     }
 
-    // Direct section tables
+    // Direct section tables (if any)
     const tbls = secNode.tbl ?? secNode["hp:tbl"];
     if (tbls) {
       const tables = Array.isArray(tbls) ? tbls : [tbls];
       for (const tbl of tables) {
-        pieces.push(this.renderTable(tbl, files, charProps, fontFaces));
+        const tblHtml = this.renderTable(tbl, files, charProps, fontFaces);
+        const trs = tbl.tr ?? tbl["hp:tr"];
+        const rowCount = trs ? (Array.isArray(trs) ? trs.length : 1) : 1;
+        const tblHeight = rowCount * 26 + 10;
+
+        if (currentHeight + tblHeight > usableHeightPt && currentHeight > 0) {
+          pages.push([]);
+          currentHeight = tblHeight;
+        } else {
+          currentHeight += tblHeight;
+        }
+        pages[pages.length - 1].push(tblHtml);
       }
     }
 
-    return pieces.join("");
+    if (pages.length === 0 || (pages.length === 1 && pages[0].length === 0)) {
+      return ["<p class=\"jhwpx-para\">&nbsp;</p>"];
+    }
+
+    return pages.map(pagePieces => pagePieces.join(""));
+  }
+
+  private getParagraphTextLength(p: any): number {
+    const runs = p.run ?? p["hp:run"];
+    if (!runs) return 0;
+    const runArr = Array.isArray(runs) ? runs : [runs];
+    let len = 0;
+    for (const r of runArr) {
+      const t = r.t ?? r["hp:t"];
+      if (typeof t === "string") len += t.length;
+      else if (typeof t === "number" || typeof t === "boolean") len += String(t).length;
+      else if (typeof t?.["#text"] === "string") len += t["#text"].length;
+    }
+    return len;
   }
 
   private renderParagraph(

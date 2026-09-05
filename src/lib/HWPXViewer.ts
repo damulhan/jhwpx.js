@@ -310,39 +310,43 @@ export class HWPXViewer {
 
     const text = new TextDecoder("utf-8").decode(headerBytes);
     const xml = this.renderer.parseXml(text);
-    const root = xml?.head ?? xml;
-    const refList = root?.refList;
+    const root = xml?.head ?? xml?.["hh:head"] ?? xml;
+    const refList = root?.refList ?? root?.["hh:refList"];
     if (!refList) return { characterProperties: charProps, fontFaces };
 
     // Font faces
-    const ffaces = refList.fontfaces?.fontface;
+    const ffaces = refList.fontfaces?.fontface ?? refList["hh:fontfaces"]?.["hh:fontface"];
     if (ffaces) {
       const arr = Array.isArray(ffaces) ? ffaces : [ffaces];
       for (const group of arr) {
-        const fonts = group.font ? (Array.isArray(group.font) ? group.font : [group.font]) : [];
+        const fonts = group.font ?? group["hh:font"] ? (Array.isArray(group.font ?? group["hh:font"]) ? (group.font ?? group["hh:font"]) : [group.font ?? group["hh:font"]]) : [];
         for (const f of fonts) {
-          const id = f["@id"];
+          const id = f["@id"] ?? f["@hh:id"];
           if (id !== undefined) fontFaces.set(String(id), f);
         }
       }
     }
 
     // Char properties
-    const cps = refList.charProperties?.charPr;
+    const cps = refList.charProperties?.charPr ?? refList["hh:charProperties"]?.["hh:charPr"];
     if (cps) {
       const arr = Array.isArray(cps) ? cps : [cps];
       for (const cp of arr) {
-        const id = cp["@id"];
+        const id = cp["@id"] ?? cp["@hh:id"];
         if (id !== undefined) {
+          const fontRef = cp.fontRef ?? cp["hh:fontRef"];
           charProps.set(String(id), {
-            height: cp["@height"],
-            textColor: cp["@textColor"],
-            shadeColor: cp["@shadeColor"],
-            bold: cp.bold !== undefined,
-            italic: cp.italic !== undefined,
-            underline: cp.underline,
-            strikeout: cp.strikeout,
-            fontRef: cp.fontRef,
+            height: cp["@height"] ?? cp["@hh:height"],
+            textColor: cp["@textColor"] ?? cp["@hh:textColor"],
+            shadeColor: cp["@shadeColor"] ?? cp["@hh:shadeColor"],
+            bold: cp.bold !== undefined || cp["hh:bold"] !== undefined,
+            italic: cp.italic !== undefined || cp["hh:italic"] !== undefined,
+            underline: cp.underline ?? cp["hh:underline"],
+            strikeout: cp.strikeout ?? cp["hh:strikeout"],
+            fontRef: fontRef ? {
+              "@hangul": fontRef["@hangul"] ?? fontRef["@hh:hangul"],
+              "@latin": fontRef["@latin"] ?? fontRef["@hh:latin"],
+            } : undefined,
           });
         }
       }
