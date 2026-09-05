@@ -38,10 +38,9 @@
 
 ---
 
-## 2. React 컴포넌트 (`JHwpxViewer`) 연동
+## 2. React / Vue 컴포넌트 연동
 
-React 프로젝트에서 손쉽게 뷰어를 임베드할 수 있도록 전용 컴포넌트가 제공됩니다:
-
+### React (`JHwpxViewer`)
 ```tsx
 import React from 'react';
 import { JHwpxViewer } from 'jhwpx.js/react';
@@ -59,3 +58,25 @@ function MyDocumentPage() {
   );
 }
 ```
+
+### Vue 3 (`JHwpxViewer`)
+```vue
+<script setup lang="ts">
+import { ref } from 'vue';
+import { JHwpxViewer } from 'jhwpx.js/vue';
+
+const viewerRef = ref();
+</script>
+
+<template>
+  <div style="width: 100vw; height: 100vh;">
+    <JHwpxViewer
+      ref="viewerRef"
+      file="/sample.hwpx"
+      initial-zoom="fit-width"
+      @document-loaded="(meta) => console.log('Loaded:', meta.title)"
+    />
+  </div>
+</template>
+```
+

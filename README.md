@@ -129,6 +129,37 @@ export function MyViewerPage() {
 
 ---
 
+## Vue 3 연동 방법 (`JHwpxViewer`)
+
+Vue 3 프로젝트에서도 Composition API 기반의 전용 컴포넌트를 제공합니다:
+
+```vue
+<script setup lang="ts">
+import { ref } from "vue";
+import { JHwpxViewer, type JHwpxViewerVueExpose } from "./src/vue";
+import "./src/style.css";
+
+const viewerRef = ref<JHwpxViewerVueExpose | null>(null);
+
+function handlePrint() {
+  viewerRef.value?.print();
+}
+</script>
+
+<template>
+  <div style="width: 100vw; height: 100vh;">
+    <JHwpxViewer
+      ref="viewerRef"
+      file="/sample.hwpx"
+      initial-zoom="fit-width"
+      @document-loaded="(meta) => console.log(meta.title, meta.format)"
+    />
+  </div>
+</template>
+```
+
+---
+
 ## 기술 문서 (Documentation)
 
 자세한 내부 구조 및 규격 설명은 [`docs/`](./docs/README.md) 폴더를 참조해 주세요:
