@@ -18,13 +18,14 @@
   --jhwpx-page-shadow: 0 4px 20px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
-* {
+.jhwpx-standalone-app *,
+.jhwpx-viewer-root,
+.jhwpx-viewer-root * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
-body {
+/* Global reset is scoped only when running standalone demo app */
+body.jhwpx-standalone-app {
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   color: var(--jhwpx-text);
   background-color: var(--jhwpx-bg);
@@ -34,12 +35,24 @@ body {
   user-select: none;
 }
 
-#app {
+#app.jhwpx-standalone-app {
   display: flex;
   flex-direction: column;
   height: 100vh;
   width: 100vw;
   position: relative;
+}
+
+/* React / Vue / Angular wrapper container */
+.jhwpx-react-container,
+.jhwpx-vue-container,
+.jhwpx-angular-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
 }
 
 /* ============================================================ */
