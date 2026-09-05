@@ -2,6 +2,8 @@
   "name": "jhwpx.js",
   "version": "0.1.0",
   "description": "HWP & HWPX Unified Web Viewer Library and Application",
+  "author": "Eui-Taik, Na <damulhan@gmail.com>",
+  "license": "Apache-2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,7 +15,11 @@
     "vite": "^8.2.2"
   },
   "dependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
     "fast-xml-parser": "^5.11.1",
-    "jszip": "^3.10.1"
+    "jszip": "^3.10.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   }
 }

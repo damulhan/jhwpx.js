@@ -1,0 +1,3 @@
+[submodule "packages/hwpxjs"]
+	path = packages/hwpxjs
+	url = https://github.com/ssabro/hwpxjs.git

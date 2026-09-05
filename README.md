@@ -2,7 +2,9 @@
 
 **jhwpx.js**는 한글 문서 표준인 **HWPX (OWPML ZIP+XML)** 및 구형 바이너리 **HWP (5.0 CFB/OLE2)** 형식을 웹 브라우저에서 직접 파싱하고, 실제 한글 워드프로세서처럼 A4 용지 레이아웃으로 렌더링해주는 통합 한글 웹 뷰어 라이브러리 및 웹 애플리케이션입니다.
 
-`hwp.js`의 뷰어 레이아웃/UX 설계와 `ssabro/hwpxjs`의 파싱 코어 기술을 계승·발전시켜 순수 JavaScript/TypeScript로 완성되었습니다.
+본 프로젝트는 오픈소스 생태계의 다음 두 훌륭한 프로젝트를 기반으로 설계 및 구현되었습니다:
+- **[hwp.js](https://github.com/hahnlee/hwp.js)**: 한글 문서 워드프로세서 스타일의 A4 페이지 뷰어 모델 및 렌더링 구조 설계 계승
+- **[hwpxjs](https://github.com/ssabro/hwpxjs)**: 최신 OWPML 기반 HWPX 파싱·변환 및 HWP 5.0 바이너리 디코딩 기술 활용
 
 ---
 
@@ -117,3 +119,44 @@ npm run build
 # 빌드 결과물 미리보기
 npm run preview
 ```
+
+---
+
+## 감사의 글 & 라이선스 (Acknowledgments & Credits)
+
+본 프로젝트는 아래 훌륭한 오픈소스 프로젝트들의 연구와 개발 결과물에 깊이 빚지고 있습니다:
+
+1. **[hwp.js](https://github.com/hahnlee/hwp.js)** (Apache-2.0, Han Lee)
+   - 웹 브라우저 기반 한글 문서 뷰어의 지평을 연 프로젝트입니다.
+   - A4 용지 규격 렌더링, 페이지 레이아웃 모델, 옵저버 기반 스크롤 트래킹 및 UI 뷰어 구조를 참고·계승하였습니다.
+
+2. **[hwpxjs](https://github.com/ssabro/hwpxjs)** (MIT, ssabro)
+   - 최신 OWPML(HWPX) 표준 패키지 규격(ZIP + XML) 분석과 HWP 5.0 CFB/OLE2 바이너리 파서의 TypeScript 포팅을 제공한 프로젝트입니다.
+   - 본 프로젝트의 코어 파싱 엔진 및 바이너리 변환 레이어로 서브모듈 연동되어 활용되었습니다.
+
+---
+
+## 저작자 (Author)
+
+- **Eui-Taik, Na** ([damulhan@gmail.com](mailto:damulhan@gmail.com))
+
+---
+
+## 라이선스 (License)
+
+```text
+Copyright 2026 Eui-Taik, Na <damulhan@gmail.com>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
+
