@@ -161,7 +161,7 @@ function App() {
 
       {/* Code integration showcase */}
       <section className="wb-code-section">
-        <h2>React에서 3줄로 임베드하기</h2>
+        <h2>React에서 포함시키기 예제</h2>
         <pre className="wb-code-block">
 {`import { JHwpxViewer } from "jhwpx.js/react";
 import "jhwpx.js/style.css";
@@ -179,7 +179,7 @@ export function DocumentViewer() {
       {/* Footer */}
       <footer className="wb-footer">
         <div>
-          jhwpx.js © 2026 <strong>Eui-Taik, Na</strong> (damulhan@gmail.com). Licensed under Apache-2.0.
+          jhwpx.js © 2026
         </div>
         <div style={{ marginTop: "6px", color: "#64748b", fontSize: "13px" }}>
           Built with inspiration and technologies from <strong>hwp.js</strong> and <strong>hwpxjs</strong>.
