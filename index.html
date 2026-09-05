@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>jhwpx.js - 한글(HWP / HWPX) 통합 웹 뷰어</title>
+    <meta name="description" content="한글 HWPX(OWPML) 및 HWP 5.0 바이너리 문서를 브라우저에서 직접 열람하는 고품질 웹 뷰어" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- Top Application Header -->
+      <header class="jhwpx-header-bar">
+        <div class="jhwpx-brand" id="btn-brand" title="jhwpx.js Home">
+          <div class="jhwpx-logo-icon">한</div>
+          <div class="jhwpx-brand-title">
+            jhwpx.js
+            <span class="jhwpx-badge">HWP & HWPX</span>
+          </div>
+          <div class="jhwpx-doc-title" id="lbl-doc-title">문서를 불러오는 중...</div>
+        </div>
+
+        <!-- Middle Tools -->
+        <div class="jhwpx-toolbar">
+          <!-- File Open Button -->
+          <input type="file" id="file-input" accept=".hwpx,.hwp" style="display: none;" />
+          <button class="jhwpx-btn jhwpx-btn-primary" id="btn-open-file" title="파일 열기 (.hwpx, .hwp)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+            파일 열기
+          </button>
+
+          <div class="jhwpx-divider"></div>
+
+          <!-- Page Navigation -->
+          <div class="jhwpx-page-nav">
+            <button class="jhwpx-btn jhwpx-btn-icon" id="btn-prev-page" title="이전 페이지 (PgUp)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <input type="text" class="jhwpx-page-input" id="input-page-num" value="1" title="페이지 번호" />
+            <span style="color: #64748b; margin: 0 4px;">/</span>
+            <span id="lbl-total-pages" style="font-weight: 600; min-width: 16px;">1</span>
+            <button class="jhwpx-btn jhwpx-btn-icon" id="btn-next-page" title="다음 페이지 (PgDn)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
+
+          <div class="jhwpx-divider"></div>
+
+          <!-- Zoom Controls -->
+          <button class="jhwpx-btn jhwpx-btn-icon" id="btn-zoom-out" title="축소 (Ctrl -)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              <line x1="8" y1="11" x2="14" y2="11"></line>
+            </svg>
+          </button>
+          <div class="jhwpx-zoom-text" id="lbl-zoom-val">100%</div>
+          <button class="jhwpx-btn jhwpx-btn-icon" id="btn-zoom-in" title="확대 (Ctrl +)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              <line x1="11" y1="8" x2="11" y2="14"></line>
+              <line x1="8" y1="11" x2="14" y2="11"></line>
+            </svg>
+          </button>
+          <button class="jhwpx-btn" id="btn-zoom-fit" title="너비 맞춤">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <polyline points="9 21 3 21 3 15"></polyline>
+              <line x1="21" y1="3" x2="14" y2="10"></line>
+              <line x1="3" y1="21" x2="10" y2="14"></line>
+            </svg>
+            너비 맞춤
+          </button>
+
+          <div class="jhwpx-divider"></div>
+
+          <!-- Print & Fullscreen -->
+          <button class="jhwpx-btn jhwpx-btn-icon" id="btn-print" title="인쇄 및 PDF 저장 (Ctrl P)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 6 2 18 2 18 9"></polyline>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+          </button>
+          <button class="jhwpx-btn jhwpx-btn-icon" id="btn-fullscreen" title="전체화면 (F11)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Sample document quick bar -->
+      <div class="jhwpx-sample-bar">
+        <div class="jhwpx-sample-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+          체험용 샘플 문서:
+        </div>
+        <div class="jhwpx-sample-tag" data-sample="/rich_sample.hwpx">📊 HWPX 서식 및 표 데모</div>
+        <div class="jhwpx-sample-tag" data-sample="/sample.hwpx">📄 HWPX 기본 문서</div>
+        <div class="jhwpx-sample-tag" data-sample="/sample_basic.hwp">📑 HWP 5.0 리포트 문서</div>
+        <div class="jhwpx-sample-tag" data-sample="/sample_noori.hwp">🏢 HWP 5.0 누리 문서</div>
+      </div>
+
+      <!-- Main Layout -->
+      <div class="jhwpx-main-layout">
+        <div class="jhwpx-viewer-container" id="viewer-container"></div>
+      </div>
+
+      <!-- File Drag and Drop Overlay -->
+      <div class="jhwpx-dropzone" id="dropzone">
+        <div class="jhwpx-dropzone-box">
+          <div class="jhwpx-dropzone-icon">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+          </div>
+          <h2 style="font-size: 20px; font-weight: 700; color: #1e293b;">한글 문서 파일 열기</h2>
+          <p style="font-size: 14px; color: #64748b;">이곳에 .hwpx 또는 .hwp 파일을 끌어다 놓으세요</p>
+        </div>
+      </div>
+
+      <!-- Loading overlay -->
+      <div class="jhwpx-loading-overlay" id="loading-overlay">
+        <div class="jhwpx-spinner"></div>
+        <div id="loading-text">한글 문서를 변환 및 파싱하고 있습니다...</div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
